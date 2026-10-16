@@ -1,0 +1,28 @@
+# hostd config. Edits are picked up within a couple of seconds, no restart needed
+# (except [server], which is read once at startup).
+#
+# Each route maps NAME.<suffix> to a port on 127.0.0.1 / ::1:
+#   health = 8808   ->   http://health.localhost  ->  127.0.0.1:8808
+
+[server]
+# Where hostd listens. Loopback addresses only.
+# Port 80 lets you type http://health.localhost with no port; binding it as a normal
+# user needs a one-time sysctl (see the README). Use e.g. "127.0.0.1:8080" to skip that.
+listen = "127.0.0.1:80"
+
+# Domain suffix. Browsers resolve *.localhost to loopback by themselves, so nothing
+# else (DNS, /etc/hosts) has to be configured. Avoid ".local": it is reserved for mDNS.
+suffix = "localhost"
+
+[routes]
+# name = port
+health = 8808
+grafana = 3000
+
+# Dev servers that reject unknown Host headers (Vite, webpack) can be sent
+# "Host: 127.0.0.1:<port>" instead. The original name is kept in X-Forwarded-Host.
+# vite = { port = 5173, rewrite_host = true }
+
+# Names may have several labels, but a dotted name MUST be quoted, otherwise TOML
+# reads it as a nested table:
+# "api.health" = 9000      ->  http://api.health.localhost

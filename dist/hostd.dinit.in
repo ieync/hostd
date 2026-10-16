@@ -1,0 +1,9 @@
+# User-level dinit service for hostd. `make install` renders the @...@ placeholders.
+#
+# Enable:  dinitctl --user enable hostd
+# Logs:    @STATEDIR@/hostd.log
+
+type = process
+command = @BINDIR@/hostd
+logfile = @STATEDIR@/hostd.log
+restart = true

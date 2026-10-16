@@ -1,0 +1,34 @@
+[package]
+name = "hostd"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Route NAME.localhost to local TCP ports; userspace, TOML-configured, no async runtime"
+license = "MIT"
+
+[lib]
+name = "hostd"
+path = "src/lib.rs"
+
+[[bin]]
+name = "hostd"
+path = "src/main.rs"
+
+[[bin]]
+name = "hostctl"
+path = "src/bin/hostctl.rs"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+httparse = "1.10.1"
+serde = { version = "1.0.229", features = ["derive"] }
+toml = "1.1.8"
+
+[lints.rust]
+# hostd is plain std networking; there is no reason for unsafe anywhere in it.
+unsafe_code = "forbid"
